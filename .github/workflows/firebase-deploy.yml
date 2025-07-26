@@ -16,7 +16,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          # Gebruik Node 20 omdat firebase-tools >=14 vereist dit
+          node-version: '20'
 
       # Installeer de dependencies voor de Cloud Functions
       - name: Install functions dependencies
