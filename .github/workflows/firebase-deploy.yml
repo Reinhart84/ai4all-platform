@@ -21,13 +21,13 @@ jobs:
       # Installeer de dependencies voor de Cloud Functions
       - name: Install functions dependencies
         working-directory: functions
-        run: npm ci
+        run: npm install
 
       # Bouw de React‑frontend
       - name: Build React app
         working-directory: frontend
         run: |
-          npm ci
+          npm install
           npm run build
 
       # Deploy naar Firebase (hosting + functies)

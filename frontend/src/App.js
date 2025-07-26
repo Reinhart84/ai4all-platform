@@ -14,13 +14,17 @@ function App() {
     setImageUrl(null);
 
     try {
-      const response = await fetch("https://generateimage-ks5pduma2a-uc.a.run.app", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      });
+      // 🌐 Verwijs naar je Cloud Function
+      const response = await fetch(
+        "https://us-central1-ai4all-platform-fe2e4.cloudfunctions.net/generateImage",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+        }
+      );
 
       const data = await response.json();
 
@@ -37,8 +41,8 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h1>Generate an AI Image</h1>
+    <div style={{ textAlign: "center", marginTop: "40px" }}>
+      <h1>Generate an AI Image 🚀</h1>
       <input
         type="text"
         value={prompt}
@@ -46,15 +50,25 @@ function App() {
         placeholder="Enter your prompt..."
         style={{ width: "300px", padding: "0.5rem" }}
       />
-      <button onClick={handleGenerate} style={{ marginLeft: "1rem", padding: "0.5rem" }}>
+      <br />
+      <button
+        onClick={handleGenerate}
+        disabled={loading}
+        style={{
+          marginTop: "10px",
+          padding: "10px 20px",
+          fontSize: "16px",
+          cursor: "pointer",
+        }}
+      >
         Generate
       </button>
 
       {loading && <p>Generating image...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {imageUrl && (
-        <div style={{ marginTop: "2rem" }}>
-          <img src={imageUrl} alt="Generated" style={{ maxWidth: "100%" }} />
+        <div style={{ marginTop: "20px" }}>
+          <img src={imageUrl} alt="Generated" />
         </div>
       )}
     </div>
