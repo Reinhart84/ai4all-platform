@@ -30,5 +30,4 @@ jobs:
       with:
         repoToken: "${{ secrets.GITHUB_TOKEN }}"
         firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-        channelId: live
         projectId: ai4all-platform-fe2e4
