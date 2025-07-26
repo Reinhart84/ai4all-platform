@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div style={{ padding: '40px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>DALL·E 2 Generator 🚀</h1>
+      <h1>DALL·E 2 Generator 🚀🚀🚀</h1>
       <input
         type="text"
         placeholder="Geef je prompt in..."
