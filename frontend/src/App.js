@@ -42,7 +42,7 @@ function App() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <h1>Generate an AI Image 🚀🚀🚀🚀</h1>
+      <h1>Generate an AI Image 🚀🚀🚀🚀🚀</h1>
       <input
         type="text"
         value={prompt}
