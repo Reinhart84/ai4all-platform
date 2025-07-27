@@ -3,15 +3,14 @@ const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const cors = require('cors')({ origin: true });
 
-// 👉 Lees je API‑sleutel uit een omgevingsvariabele.
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-/**
- * HTTP‑trigger die een POST‑verzoek met een `prompt` accepteert,
- * het prompt doorstuurt naar de OpenAI API en het URL van het gegenereerde beeld terugstuurt.
- */
 exports.generateImage = functions
-  .runWith({ secrets: ["OPENAI_API_KEY"] }) // ✅ Secret declaratie toegevoegd
+  .runWith({
+    secrets: ["OPENAI_API_KEY"],
+    timeoutSeconds: 300,
+    memory: '512MB'
+  })
   .https.onRequest((req, res) => {
     cors(req, res, async () => {
       if (req.method !== 'POST') {
@@ -28,7 +27,6 @@ exports.generateImage = functions
         });
       }
 
-      // Voorbeeld‑aanroep naar OpenAI DALL·E (gpt-image-1) API
       const url = 'https://api.openai.com/v1/images/generations';
       try {
         const openaiRes = await fetch(url, {
@@ -38,7 +36,8 @@ exports.generateImage = functions
             Authorization: `Bearer ${OPENAI_API_KEY}`,
           },
           body: JSON.stringify({
-            model: 'dall-e-2',
+            // Laat model weg zodat OpenAI het standaardmodel gebruikt,
+            // of zet 'gpt-image-1' als je DALL·E 3 wilt.
             prompt,
             n: 1,
             size: '1024x1024',
