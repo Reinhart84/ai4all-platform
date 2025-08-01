@@ -1,23 +1,32 @@
 // functions/index.js
 
+// 1. Imports en globale instellingen
 const { onRequest } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 const cors = require("cors")({ origin: true });
+const admin = require("firebase-admin");
 
-// Globale instellingen voor alle v2-functies in deze file:
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+const db = admin.firestore();
+
+// Globale settings voor alle v2-functies in deze file
 setGlobalOptions({
   secrets: ["OPENAI_API_KEY"],
   timeoutSeconds: 300,
   memory: "512Mi",
 });
 
-exports.generateImage = onRequest({ region: "us-central1" }, async (req, res) => {
+// 2. Handler-implementatie
+async function generateImageHandler(req, res) {
   cors(req, res, async () => {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method Not Allowed" });
     }
+
     const { prompt } = req.body;
     if (!prompt) {
       return res.status(400).json({ error: "Missing prompt" });
@@ -59,10 +68,23 @@ exports.generateImage = onRequest({ region: "us-central1" }, async (req, res) =>
         return res.status(500).json({ error: "No image returned." });
       }
 
-      res.status(200).json({ imageUrl });
+      // Opslaan in Firestore
+      await db.collection("images").add({
+        prompt,
+        imageUrl,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      return res.status(200).json({ imageUrl });
     } catch (err) {
       console.error("Error calling OpenAI API:", err);
-      res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json({ error: "Internal server error" });
     }
   });
-});
+}
+
+// 3. Exporteren van de v2–functie
+exports.generateImage = onRequest(
+  { region: "us-central1" },
+  generateImageHandler
+);
