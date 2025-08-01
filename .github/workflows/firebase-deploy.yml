@@ -2,10 +2,6 @@ name: Deploy to Firebase Hosting and Functions
 
 on:
   push:
-    branches:
-      - main      # blijft de live deploy
-      - staging   # voer dezelfde workflow uit bij pushes naar staging
-
 
 jobs:
   build-and-deploy:
