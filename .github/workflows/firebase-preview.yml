@@ -1,19 +1,15 @@
+# .github/workflows/firebase-preview.yml
 name: 🔄 Firebase Preview Deploy
 
--on:
--  push:
--    branches:
--      - main
--  pull_request:
--    branches:
--      - main
-+on:
-+  push:
-+    branches:
-+      - staging       # deploy bij elke push naar staging
-+  pull_request:
-+    branches:
-+      - staging       # of bij PRs *naar* staging
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
 
 jobs:
   preview-deploy:
@@ -34,16 +30,16 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies (functions)
-        run: npm ci
         working-directory: ./functions
+        run: npm ci
 
       - name: Install dependencies (frontend)
-        run: npm ci
         working-directory: ./frontend
+        run: npm ci
 
       - name: Build frontend
-        run: npm run build
         working-directory: ./frontend
+        run: npm run build
 
       - name: Deploy Cloud Functions
         run: |
