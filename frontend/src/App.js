@@ -52,7 +52,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>AI Image Generator 🚀🚀</h1>
+      <h1>AI Image Generator 🚀🚀🚀</h1>
 
       {/* Generate-form */}
       <div className="form-container">
