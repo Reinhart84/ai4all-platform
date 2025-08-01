@@ -1,9 +1,19 @@
 name: 🔄 Firebase Preview Deploy
 
-on:
-  pull_request:
-    branches:
-      - main
+-on:
+-  push:
+-    branches:
+-      - main
+-  pull_request:
+-    branches:
+-      - main
++on:
++  push:
++    branches:
++      - staging       # deploy bij elke push naar staging
++  pull_request:
++    branches:
++      - staging       # of bij PRs *naar* staging
 
 jobs:
   preview-deploy:
