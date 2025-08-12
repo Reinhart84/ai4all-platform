@@ -64,16 +64,16 @@ jobs:
           fi
 
       # ---------- DEPLOY ----------
-      - name: 🚀 Deploy STAGING hosting (branch=staging)
+      - name: 🚀 Deploy STAGING hosting (branch=staging → siteId)
         if: github.ref == 'refs/heads/staging'
         run: |
           npx firebase-tools deploy \
             --project ai4all-platform-fe2e4 \
-            --only hosting:staging
+            --only hosting:site:ai4all-platform-fe2e4-staging
 
-      - name: 🚀 Deploy PRODUCTION (hosting + functions) (branch=main)
+      - name: 🚀 Deploy PRODUCTION (branch=main → siteId + functions)
         if: github.ref == 'refs/heads/main'
         run: |
           npx firebase-tools deploy \
             --project ai4all-platform-fe2e4 \
-            --only hosting:production,functions
+            --only hosting:site:ai4all-platform-fe2e4,functions
