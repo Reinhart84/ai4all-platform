@@ -6,13 +6,11 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Lees eerder opgeslagen afbeeldingen uit localStorage
   const [images, setImages] = useState(() => {
     const saved = localStorage.getItem("images");
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Sla afbeeldingen op in localStorage wanneer de lijst verandert
   useEffect(() => {
     localStorage.setItem("images", JSON.stringify(images));
   }, [images]);
@@ -38,7 +36,6 @@ function App() {
 
       if (data.imageUrl) {
         setImageUrl(data.imageUrl);
-        // Voeg het nieuwe image toe aan de lijst
         setImages((prev) => [...prev, data.imageUrl]);
       } else {
         setError(data.error || "No image returned.");
@@ -51,61 +48,40 @@ function App() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      <h1>Generate an AI Image</h1>
-      <input
-        type="text"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Enter your prompt..."
-        style={{ width: "300px", padding: "0.5rem" }}
-      />
-      <br />
-      <button
-        onClick={handleGenerate}
-        disabled={loading}
-        style={{
-          marginTop: "10px",
-          padding: "10px 20px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Generate
-      </button>
+    <div style={styles.container}>
+      <h1 style={styles.title}>🎨 AI Image Generator</h1>
 
-      {loading && <p>Generating image...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div style={styles.card}>
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Enter your prompt..."
+          style={styles.input}
+        />
+        <button
+          onClick={handleGenerate}
+          disabled={loading}
+          style={styles.button}
+        >
+          {loading ? "Generating..." : "Generate"}
+        </button>
+        {error && <p style={styles.error}>{error}</p>}
+      </div>
 
-      {/* Toon de meest recent gegenereerde afbeelding */}
       {imageUrl && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Latest image</h2>
-          <img
-            src={imageUrl}
-            alt="Generated"
-            style={{ maxWidth: "100%", height: "auto" }}
-          />
+        <div style={styles.section}>
+          <h2 style={styles.subheading}>🖼️ Latest Image</h2>
+          <img src={imageUrl} alt="Generated" style={styles.mainImage} />
         </div>
       )}
 
-      {/* Toon alle opgeslagen afbeeldingen */}
       {images.length > 0 && (
-        <div style={{ marginTop: "40px", textAlign: "left" }}>
-          <h2>Saved images</h2>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div style={styles.section}>
+          <h2 style={styles.subheading}>💾 Saved Images</h2>
+          <div style={styles.gallery}>
             {images.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Saved ${idx}`}
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  objectFit: "cover",
-                  margin: "5px",
-                }}
-              />
+              <img key={idx} src={img} alt={`Saved ${idx}`} style={styles.thumb} />
             ))}
           </div>
         </div>
@@ -113,5 +89,74 @@ function App() {
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "900px",
+    margin: "0 auto",
+    padding: "20px",
+    fontFamily: "'Segoe UI', sans-serif",
+  },
+  title: {
+    textAlign: "center",
+    marginBottom: "30px",
+    fontSize: "2.2rem",
+  },
+  card: {
+    backgroundColor: "#f8f8f8",
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: "30px",
+  },
+  input: {
+    width: "80%",
+    padding: "10px",
+    fontSize: "1rem",
+    marginBottom: "10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  },
+  button: {
+    padding: "10px 20px",
+    fontSize: "1rem",
+    backgroundColor: "#007BFF",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  error: {
+    color: "red",
+    marginTop: "10px",
+  },
+  section: {
+    marginTop: "40px",
+    textAlign: "center",
+  },
+  subheading: {
+    marginBottom: "20px",
+  },
+  mainImage: {
+    maxWidth: "100%",
+    borderRadius: "10px",
+  },
+  gallery: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "10px",
+  },
+  thumb: {
+    width: "200px",
+    height: "200px",
+    objectFit: "cover",
+    borderRadius: "5px",
+    boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+  },
+};
 
 export default App;
