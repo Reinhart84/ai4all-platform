@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "ai4all-platform-fe2e4"
+  },
+  "targets": {
+    "ai4all-platform-fe2e4": {
+      "hosting": {
+        "production": [
+          "ai4all-platform-fe2e4"
+        ],
+        "staging": [
+          "ai4all-platform-fe2e4-staging"
+        ]
+      }
+    }
   }
 }
