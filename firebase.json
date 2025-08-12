@@ -2,30 +2,19 @@
   "functions": {
     "source": "functions"
   },
-  "hosting": [
-    {
-      "site": "ai4all-platform-fe2e4",
-      "public": "hosting-public",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    },
-    {
-      "site": "ai4all-platform-fe2e4-staging",
-      "public": "hosting-public",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    }
-  ]
+  "hosting": {
+    "site": "ai4all-platform-fe2e4",
+    "public": "frontend/build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
