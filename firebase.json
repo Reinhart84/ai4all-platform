@@ -1,9 +1,5 @@
 {
-  "functions": {
-    "source": "functions"
-  },
   "hosting": {
-    "site": "ai4all-platform-fe2e4",
     "public": "frontend/build",
     "ignore": [
       "firebase.json",
@@ -15,6 +11,21 @@
         "source": "**",
         "destination": "/index.html"
       }
-    ]
+    ],
+    "headers": [
+      {
+        "source": "/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ],
+    "cleanUrls": true,
+    "preview": {
+      "expires": "7d"
+    }
   }
 }
