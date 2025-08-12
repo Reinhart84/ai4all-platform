@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - staging
 
 jobs:
   build-and-deploy:
@@ -16,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          # Gebruik Node 20 omdat firebase-tools >=14 vereist dit
+          # Node 20 is vereist voor firebase-tools v14+
           node-version: '20'
 
       # Installeer de dependencies voor de Cloud Functions
@@ -30,8 +31,10 @@ jobs:
         run: |
           npm install
           npm run build
-      # Deploy Firebase Functions
+
+      # Deploy Firebase Functions alleen vanuit de main‑branch
       - name: Deploy Cloud Functions
+        if: github.ref == 'refs/heads/main'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/service-account.json
         run: |
@@ -39,11 +42,23 @@ jobs:
           npm install -g firebase-tools
           firebase deploy --only functions --project ai4all-platform-fe2e4
 
-      # Deploy naar Firebase (hosting + functies)
-      - name: Deploy to Firebase
+      # Deploy Hosting naar de live omgeving bij main
+      - name: Deploy Hosting (prod)
+        if: github.ref == 'refs/heads/main'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           channelId: live
+          projectId: ai4all-platform-fe2e4
+
+      # Deploy Hosting naar staging-kanaal bij staging
+      - name: Deploy Hosting (staging)
+        if: github.ref == 'refs/heads/staging'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          # Kies hier een naam voor je staging‑kanaal
+          channelId: staging
           projectId: ai4all-platform-fe2e4

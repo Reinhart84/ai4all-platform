@@ -14,7 +14,7 @@ function App() {
     setImageUrl(null);
 
     try {
-      // 🌐 Verwijs naar je Cloud Function
+      // 🌐 Verwijs naar je Cloud Function (blijft hetzelfde voor staging en prod)
       const response = await fetch(
         "https://us-central1-ai4all-platform-fe2e4.cloudfunctions.net/generateImage",
         {
