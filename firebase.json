@@ -2,30 +2,15 @@
   "functions": {
     "source": "functions"
   },
-  "hosting": [
-    {
-      "target": "production",
-      "public": "hosting-public",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    },
-    {
-      "target": "staging",
-      "public": "hosting-public",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
-        { "source": "**", "destination": "/index.html" }
-      ]
-    }
-  ]
+  "hosting": {
+    "public": "hosting-public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
 }
