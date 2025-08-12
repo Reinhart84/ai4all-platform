@@ -24,15 +24,15 @@ jobs:
         with:
           node-version: '20'
 
-      # ---- Install & build FUNCTIONS (always install; deploy only on main) ----
-      - name: 📦 Install functions deps
-        working-directory: ./functions
-        run: npm ci
-
-      # ---- Install & build FRONTEND ----
+      # ---------- FRONTEND ----------
       - name: 📦 Install frontend deps
         working-directory: ./frontend
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: 🏗️ Build frontend
         working-directory: ./frontend
@@ -52,7 +52,18 @@ jobs:
             exit 1
           fi
 
-      # ---- Deploy logic per branch ----
+      # ---------- FUNCTIONS (main only) ----------
+      - name: 📦 Install functions deps (only on main)
+        if: github.ref == 'refs/heads/main'
+        working-directory: ./functions
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+
+      # ---------- DEPLOY ----------
       - name: 🚀 Deploy STAGING hosting (branch=staging)
         if: github.ref == 'refs/heads/staging'
         run: |
